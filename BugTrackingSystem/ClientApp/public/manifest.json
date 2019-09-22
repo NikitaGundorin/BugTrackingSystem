@@ -1,6 +1,6 @@
 {
-  "short_name": "BugTrackingSystem",
-  "name": "BugTrackingSystem",
+  "short_name": "BugTrackingSystemTest",
+  "name": "BugTrackingSystemTest",
   "icons": [
     {
       "src": "favicon.ico",
