@@ -1,10 +1,15 @@
+using BugTrackingSystem.Models;
+using BugTrackingSystem.Models.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BugTrackingSystem
 {
@@ -20,6 +25,31 @@ namespace BugTrackingSystem
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<BugTrackingSystemContext>(options => options.UseSqlServer(connection));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            ValidateAudience = true,
+
+                            ValidAudience = AuthOptions.AUDIENCE,
+
+                            ValidateLifetime = true,
+
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
@@ -27,6 +57,11 @@ namespace BugTrackingSystem
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<BugRepository>();
+
+            services.AddCors();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +81,10 @@ namespace BugTrackingSystem
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseAuthentication();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseMvc(routes =>
             {
