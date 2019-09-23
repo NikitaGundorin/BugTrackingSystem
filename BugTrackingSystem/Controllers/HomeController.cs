@@ -26,18 +26,9 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpGet("index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder = "IdAsc")
         {
-            List<BugPreviewViewModel> bugs = await db.Bugs.Select(b => new BugPreviewViewModel
-            {
-                Id = b.Id,
-                CreationDate = b.CreationDate.ToString("dd.MM.yyy hh:mm"),
-                ShortDescription = b.ShortDescription,
-                Importance = b.Importance.Name,
-                Priority = b.Priority.Name,
-                Status = b.Status.Name,
-                UserName = b.User.UserName
-            }).ToListAsync();
+            var bugs = await bugRepository.GetBugsListAsync(sortOrder);
 
             return Ok(bugs);
         }
