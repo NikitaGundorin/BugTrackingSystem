@@ -28,12 +28,11 @@ namespace BugTrackingSystem.Controllers
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
-            List<BugViewModel> bugs = await db.Bugs.Select(b => new BugViewModel
+            List<BugPreviewViewModel> bugs = await db.Bugs.Select(b => new BugPreviewViewModel
             {
                 Id = b.Id,
                 CreationDate = b.CreationDate.ToString("dd.MM.yyy hh:mm"),
                 ShortDescription = b.ShortDescription,
-                FullDescription = b.FullDescription,
                 Importance = b.Importance.Name,
                 Priority = b.Priority.Name,
                 Status = b.Status.Name,
@@ -44,14 +43,20 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpPost("updatebugstatus")]
-        public async Task<IActionResult> UpdateBugStatus(int id, int newBugStatusId, string comment)
+        public async Task<IActionResult> UpdateBugStatus([FromBody] BugUpdateStatusViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
 
-            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
+                var result = await bugRepository.UpdateBugStatusAsync(model.BugId, model.NewStatusId, model.Comment, user.Id);
+                if (result != null)
+                {
+                    return Ok();
+                }
+            }
 
-            await bugRepository.UpdateBugStatusAsync(id, newBugStatusId, comment, user.Id);
-
-            return Ok();
+            return BadRequest(new { message = "Parameters are incorrect" });
         }
 
         [HttpGet("addbug")]
@@ -88,12 +93,17 @@ namespace BugTrackingSystem.Controllers
             return BadRequest(new { message = "Parameters are incorrect" });
         }
 
-        [HttpGet("getbugchangelog")]
+        [HttpGet("bug/{bugId}")]
         public async Task<IActionResult> GetBugChangelog(int bugId)
         {
-            List<BugChangelogViewModel> bugChangelogs = await bugRepository.GetBugChangelogs(bugId);
+            var bug = await bugRepository.GetFullBugAsync(bugId);
 
-            return Ok(bugChangelogs);
+            if (bug is null)
+            {
+                return BadRequest( new { message="Bug not found" } );
+            }
+
+            return Ok(bug);
         }
     }
 }

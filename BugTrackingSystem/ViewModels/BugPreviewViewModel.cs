@@ -2,15 +2,13 @@
 
 namespace BugTrackingSystem.ViewModels
 {
-    public class BugViewModel
+    public class BugPreviewViewModel
     {
         public int Id { get; set; }
 
         public string CreationDate { get; set; }
 
         public string ShortDescription { get; set; }
-
-        public string FullDescription { get; set; }
 
         public string UserName { get; set; }
 

@@ -4,7 +4,9 @@ import { handleResponse } from '../helpers/HandleResponse';
 
 export const bugService = {
     getBugs,
+    getBug,
     addBug,
+    updateBugStatus,
     getParams
 };
 
@@ -13,9 +15,12 @@ function getBugs() {
     return fetch(`${apiUrl}/home/index`, requestOptions).then(handleResponse);
 }
 
+function getBug(id){
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${apiUrl}/home/bug/${id}`, requestOptions).then(handleResponse);
+}
+
 function addBug(shortDescription, fullDescription, priorityId, importanceId) {
-    const tokenHeader = authHeader();
-    console.log(tokenHeader);
 
     const requestOptions = {
         method: 'POST',
@@ -24,6 +29,16 @@ function addBug(shortDescription, fullDescription, priorityId, importanceId) {
     };
 
     return fetch(`${apiUrl}/home/addbug`, requestOptions).then(handleResponse)
+}
+
+function updateBugStatus(bugId, newStatusId, comment) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `${authHeader().Authorization}` },
+        body: JSON.stringify({ bugId, newStatusId, comment })
+    };
+
+    return fetch(`${apiUrl}/home/updatebugstatus`, requestOptions).then(handleResponse)
 }
 
 function getParams() {

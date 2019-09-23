@@ -6,6 +6,7 @@ import { Home } from './components/Home';
 import { SignIn } from './components/SignIn';
 import { SignUp } from './components/SignUp';
 import { AddBug } from './components/AddBug';
+import { Bug } from './components/Bug';
 import { PrivateRoute } from './components/PrivateRoute';
 import { authenticationService } from './services/AuthenticationService';
 
@@ -52,12 +53,12 @@ export default class App extends Component {
                                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                                     {currentUser &&
                                         <ul className="navbar-nav flex-grow">
-                                            <Button tag={Link} color="primary" className="navitem" to="/add-bug" style={{marginRight: "5px"}}>Add Bug</Button>
+                                            <Button tag={Link} color="primary" className="navitem" to="/add-bug" style={{ marginRight: "5px" }}>Add Bug</Button>
                                             <NavItem>
                                                 <NavLink tag={Link} className="text-dark navitem" to="/">All bugs</NavLink>
                                             </NavItem>
                                             <NavItem>
-                                            <NavLink onClick={this.logout} className="text-dark navitem navlink" style={{cursor: "pointer"}}>Logout</NavLink>
+                                                <NavLink onClick={this.logout} className="text-dark navitem navlink" style={{ cursor: "pointer" }}>Logout</NavLink>
                                             </NavItem>
                                         </ul>
                                     }
@@ -66,7 +67,7 @@ export default class App extends Component {
                                             <NavItem>
                                                 <NavLink tag={Link} className="text-dark navitem" to="/sign-in">Sign In</NavLink>
                                             </NavItem>
-                                            <Button tag={Link} className="navitem" color="primary" to="/sign-up" style={{marginLeft: "5px"}}>Sign Up</Button>
+                                            <Button tag={Link} className="navitem" color="primary" to="/sign-up" style={{ marginLeft: "5px" }}>Sign Up</Button>
                                         </ul>
                                     }
                                 </Collapse>
@@ -78,6 +79,7 @@ export default class App extends Component {
                         <Route path="/sign-in" component={SignIn} />
                         <Route path="/sign-up" component={SignUp} />
                         <PrivateRoute path="/add-bug" component={AddBug} />
+                        <PrivateRoute path="/bug/:id" component={Bug} />
                     </Container>
                 </div>
             </Router>

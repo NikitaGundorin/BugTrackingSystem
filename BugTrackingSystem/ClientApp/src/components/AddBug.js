@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, ButtonGroup } from 'reactstrap';
-import "./FormStyle.css";
+import "./style.css";
 import { bugService } from '../services/BugService';
 
 export class AddBug extends Component {
@@ -40,7 +40,7 @@ export class AddBug extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.setState({ isSubmitting: false });
+        this.setState({ isSubmitting: true });
         bugService.addBug(this.state.shortDescription, this.state.fullDescription, this.state.priorityId, this.state.importanceId)
             .then(
                 bug => {
@@ -52,6 +52,7 @@ export class AddBug extends Component {
                     alert(error);
                 }
             );
+        this.setState({ isSubmitting: false });
     }
 
     render() {
@@ -63,11 +64,11 @@ export class AddBug extends Component {
                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: "700px" }}>
                     <h2>Add Bug</h2>
                     <FormGroup>
-                        <Label for="shortDescription">Short description:</Label>
-                        <Input type="text" name="shortDescription" id="shortDescription" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Short description" />
+                        <Label for="shortDescription">Short Description:</Label>
+                        <Input type="text" name="shortDescription" id="shortDescription" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Short Description" />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="fullDescription">Password:</Label>
+                        <Label for="fullDescription">Full Description:</Label>
                         <Input type="textarea" name="fullDescription" id="fullDescription" value={this.state.fullDescription} onChange={this.handleChange} placeholder="Full Description" />
                     </FormGroup>
                     <FormGroup>

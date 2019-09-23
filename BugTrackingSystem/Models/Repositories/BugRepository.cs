@@ -16,14 +16,42 @@ namespace BugTrackingSystem.Models.Repositories
             this.db = db;
         }
 
+
         public async Task<Bug> GetBugAsync(int id)
         {
-            Bug bug = await db.Bugs.FindAsync(id);
+            Bug bug = await db.Bugs.FirstOrDefaultAsync(b => b.Id == id);
 
             if (bug is null)
             {
-                throw new Exception("Bug not found");
+                return null;
             }
+
+            return bug;
+        }
+
+        public async Task<BugViewModel> GetFullBugAsync(int bugId)
+        {
+            Bug foundBug = await GetBugAsync(bugId);
+
+            if (foundBug is null)
+            {
+                return null;
+            }
+
+            List<BugChangelogViewModel> bugChangelog = await GetBugChangelogs(bugId);
+
+            BugViewModel bug = new BugViewModel()
+            {
+                Id = foundBug.Id,
+                CreationDate = foundBug.CreationDate.ToString("dd.MM.yyy hh:mm"),
+                ShortDescription = foundBug.ShortDescription,
+                FullDescription = foundBug.FullDescription,
+                Importance = db.Importances.FirstOrDefault(i => i.Id == foundBug.ImportanceId).Name,
+                Priority = db.Priorities.FirstOrDefault(p => p.Id == foundBug.PriorityId).Name,
+                Status = db.Statuses.FirstOrDefault(s => s.Id == foundBug.StatusId).Name,
+                UserName = db.Users.FirstOrDefault(u => u.Id == foundBug.UserId).UserName,
+                BugChangeLog = bugChangelog
+            };
 
             return bug;
         }
@@ -47,17 +75,31 @@ namespace BugTrackingSystem.Models.Repositories
                 CreationDate = DateTime.Now,
                 ShortDescription = bug.ShortDescription,
                 FullDescription = bug.FullDescription,
-                Importance = await db.Importances.FindAsync(bug.ImportanceId),
+                Importance = await db.Importances.FirstOrDefaultAsync(i => i.Id == bug.ImportanceId),
                 ImportanceId = bug.ImportanceId,
-                Priority = await db.Priorities.FindAsync(bug.PriorityId),
+                Priority = await db.Priorities.FirstOrDefaultAsync(p => p.Id == bug.PriorityId),
                 PriorityId = bug.PriorityId,
-                Status = await db.Statuses.FindAsync(1),
+                Status = await db.Statuses.FirstOrDefaultAsync(p => p.Id == 1),
                 StatusId = 1,
                 User = user,
                 UserId = user.Id
             };
 
+
             await db.Bugs.AddAsync(newBug);
+            await db.SaveChangesAsync();
+
+            BugChangelog bugChangelog = new BugChangelog()
+            {
+                BugId = newBug.Id,
+                Bug = newBug,
+                Date = newBug.CreationDate,
+                StatusId = 1,
+                Comment = "Bug created.",
+                UserId = newBug.UserId
+            };
+
+            await db.BugChangelogs.AddAsync(bugChangelog);
             await db.SaveChangesAsync();
 
             return newBug;
@@ -65,11 +107,11 @@ namespace BugTrackingSystem.Models.Repositories
 
         public async Task<Bug> UpdateBugStatusAsync(int id, int newStatusId, string comment, int userId)
         {
-            Bug bug = await db.Bugs.FindAsync(id);
+            Bug bug = await db.Bugs.FirstOrDefaultAsync(b => b.Id == id);
 
             if (bug is null)
             {
-                throw new Exception("Bug not found");
+                return null;
             }
 
             if (bug.StatusId == 3)
@@ -77,11 +119,11 @@ namespace BugTrackingSystem.Models.Repositories
                 switch (newStatusId)
                 {
                     case 2:
-                        bug.Status = await db.Statuses.FindAsync(2);
+                        bug.Status = await db.Statuses.FirstOrDefaultAsync(s => s.Id == 2);
                         bug.StatusId = 2;
                         break;
                     case 4:
-                        bug.Status = await db.Statuses.FindAsync(4);
+                        bug.Status = await db.Statuses.FirstOrDefaultAsync(s => s.Id == 4);
                         bug.StatusId = 4;
                         break;
                 }
@@ -91,11 +133,11 @@ namespace BugTrackingSystem.Models.Repositories
                 switch (bug.StatusId)
                 {
                     case 1:
-                        bug.Status = await db.Statuses.FindAsync(2);
+                        bug.Status = await db.Statuses.FirstOrDefaultAsync(s => s.Id == 2);
                         bug.StatusId = 2;
                         break;
                     case 2:
-                        bug.Status = await db.Statuses.FindAsync(3);
+                        bug.Status = await db.Statuses.FirstOrDefaultAsync(s => s.Id == 3);
                         bug.StatusId = 3;
                         break;
                 }
@@ -129,10 +171,10 @@ namespace BugTrackingSystem.Models.Repositories
                 BugChangelogViewModel item = new BugChangelogViewModel()
                 {
                     BugId = b.BugId,
-                    Date = b.Date,
-                    UserName = db.Users.Find(b.UserId).UserName,
+                    Date = b.Date.ToString("dd.MM.yyy hh:mm"),
+                    UserName = db.Users.FirstOrDefault(u => u.Id == b.UserId).UserName,
                     Comment = b.Comment,
-                    NewStatus = db.Statuses.Find(b.StatusId).Name
+                    NewStatus = db.Statuses.FirstOrDefault(s => s.Id == b.StatusId).Name
                 };
                 result.Add(item);
             }

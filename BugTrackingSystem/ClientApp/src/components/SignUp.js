@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import "./FormStyle.css";
+import "./style.css";
 import { authenticationService } from '../services/AuthenticationService';
 
 export class SignUp extends Component {
