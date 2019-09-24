@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, ButtonGroup, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, ButtonGroup, FormText, Spinner } from 'reactstrap';
 import "./style.css";
 import { bugService } from '../services/BugService';
 import { history } from '../App';
@@ -15,6 +15,7 @@ export class AddBug extends Component {
             priorityId: 1,
             importanceId: 1,
             params: null,
+            isLoad: false,
             isSubmitting: false
         };
 
@@ -22,7 +23,7 @@ export class AddBug extends Component {
     }
 
     componentDidMount() {
-        bugService.getParams().then(params => this.setState({ params }));
+        bugService.getParams().then(params => this.setState({ params, isLoad: true }));
     }
 
     validateForm() {
@@ -63,33 +64,40 @@ export class AddBug extends Component {
         return (
             <div>
                 <a href="#" onClick={() => history.push('/')}>All bugs</a>
-                <Form className="infoBlock" onSubmit={this.handleSubmit} style={{ maxWidth: "700px" }}>
-                    <h2>Add Bug</h2>
-                    <FormGroup>
-                        <Label for="shortDescription">Short Description:</Label>
-                        <Input type="text" name="shortDescription" id="shortDescription" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Short Description" />
-                        <FormText color="muted">
-                            Maximum 35 characters
+                {
+                    this.state.isLoad ?
+                        <Form className="infoBlock" onSubmit={this.handleSubmit} style={{ maxWidth: "700px" }}>
+                            <h2>Add Bug</h2>
+                            <FormGroup>
+                                <Label for="shortDescription">Short Description:</Label>
+                                <Input type="text" name="shortDescription" id="shortDescription" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Short Description" />
+                                <FormText color="muted">
+                                    Maximum 35 characters
                         </FormText>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="fullDescription">Full Description:</Label>
-                        <Input type="textarea" name="fullDescription" id="fullDescription" value={this.state.fullDescription} onChange={this.handleChange} placeholder="Full Description" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="importance">Importance:</Label><br />
-                        <ButtonGroup id="importance">
-                            {importance}
-                        </ButtonGroup>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="priority">Priority:</Label><br />
-                        <ButtonGroup id="priority">
-                            {priority}
-                        </ButtonGroup>
-                    </FormGroup>
-                    <Button type="submit" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting} >Add</Button>
-                </Form>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="fullDescription">Full Description:</Label>
+                                <Input type="textarea" name="fullDescription" id="fullDescription" value={this.state.fullDescription} onChange={this.handleChange} placeholder="Full Description" />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="importance">Importance:</Label><br />
+                                <ButtonGroup id="importance">
+                                    {importance}
+                                </ButtonGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="priority">Priority:</Label><br />
+                                <ButtonGroup id="priority">
+                                    {priority}
+                                </ButtonGroup>
+                            </FormGroup>
+                            <Button type="submit" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting} >Add</Button>
+                        </Form>
+                        :
+                        <div style={{ display: "flex", justifyContent: "center" }} >
+                            <Spinner color="primary" />
+                        </div>
+                }
             </div>
         )
     }

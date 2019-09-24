@@ -61,9 +61,7 @@ export class Home extends Component {
   }
 
   componentDidMount(sortOrder = "IdAsc", page = 1) {
-    this.setState({ isLoad: false });
-    bugService.getBugs(sortOrder, page, this.state.pageSize).then(data => this.setState({ data }));
-    this.setState({ isLoad: true });
+    bugService.getBugs(sortOrder, page, this.state.pageSize).then(data => this.setState({ data, isLoad: true }));
   }
 
   render() {
@@ -106,7 +104,9 @@ export class Home extends Component {
             </tbody>
           </Table>
           :
-          <Spinner color="primary"/>
+          <div style={{ display: "flex", justifyContent: "center" }} >
+            <Spinner color="primary" />
+          </div>
         }
         {paginationBasic}
       </div>
