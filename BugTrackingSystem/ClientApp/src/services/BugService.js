@@ -10,12 +10,12 @@ export const bugService = {
     getParams
 };
 
-function getBugs() {
+function getBugs(sortOrder) {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${apiUrl}/home/index`, requestOptions).then(handleResponse);
+    return fetch(`${apiUrl}/home/index?sortOrder=${sortOrder}`, requestOptions).then(handleResponse);
 }
 
-function getBug(id){
+function getBug(id) {
     const requestOptions = { method: 'GET', headers: authHeader() };
     return fetch(`${apiUrl}/home/bug/${id}`, requestOptions).then(handleResponse);
 }

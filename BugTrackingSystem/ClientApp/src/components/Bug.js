@@ -19,7 +19,7 @@ export class Bug extends Component {
     }
 
     updateBugStatus(bugId, newStatus, comment) {
-        bugService.updateBugStatus(bugId, newStatus, comment).then
+        bugService.updateBugStatus(bugId, newStatus, comment)
     }
 
     id = this.props.match.params.id;
