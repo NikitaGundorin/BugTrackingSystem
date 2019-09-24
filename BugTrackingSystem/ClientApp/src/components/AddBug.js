@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, ButtonGroup } from 'reactstrap';
 import "./style.css";
 import { bugService } from '../services/BugService';
+import { history } from '../App';
 
 export class AddBug extends Component {
     static displayName = AddBug.name;
@@ -61,7 +62,8 @@ export class AddBug extends Component {
 
         return (
             <div>
-                <Form onSubmit={this.handleSubmit} style={{ maxWidth: "700px" }}>
+                <a href="#" onClick={() => history.push('/')}>All bugs</a>
+                <Form className="infoBlock" onSubmit={this.handleSubmit} style={{ maxWidth: "700px" }}>
                     <h2>Add Bug</h2>
                     <FormGroup>
                         <Label for="shortDescription">Short Description:</Label>

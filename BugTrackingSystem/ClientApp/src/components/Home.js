@@ -3,8 +3,6 @@ import { Table, Button, Pagination, PaginationItem, PaginationLink } from 'react
 import { bugService } from '../services/BugService';
 import { history } from '../App'
 import "./style.css";
-import { timingSafeEqual } from 'crypto';
-
 
 const Row = ({ id, creationDate, shortDescription, importance, priority, status, userName }) => (
   <tr style={{ varticalAlign: 'center' }}>
@@ -84,7 +82,7 @@ export class Home extends Component {
     );
 
     return (
-      <div>
+      <div className="infoBlock">
         <h1>All bugs</h1>
         {rows &&
           <Table hover>

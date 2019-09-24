@@ -3,6 +3,7 @@ import { ButtonGroup, Container, Table } from 'reactstrap';
 import "./style.css";
 import { bugService } from '../services/BugService';
 import { UpdateBugStatus } from './UpdateBugStatus';
+import { history } from '../App'
 
 export class Bug extends Component {
     static displayName = Bug.name;
@@ -57,57 +58,68 @@ export class Bug extends Component {
 
         return (
             <div>
+                <a href="#" onClick={() => history.push('/')}>All bugs</a>
                 {
                     bug &&
                     <Container>
-                        <h3>Bug #{bug.id}</h3>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Creation Date</th>
-                                    <th>Short Description</th>
-                                    <th>Importance</th>
-                                    <th>Priority</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                    {
-                                        bug.status !== "Closed" &&
-                                        <th>Action</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{bug.id}</td>
-                                    <td>{bug.creationDate}</td>
-                                    <td>{bug.shortDescription}</td>
-                                    <td>{bug.importance}</td>
-                                    <td>{bug.priority}</td>
-                                    <td>{bug.userName}</td>
-                                    <td>{bug.status}</td>
-                                    <td>
-                                        {button}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                        <h5>Full Description</h5>
-                        <p>{bug.fullDescription}</p>
-                        <h5>Changelog</h5>
-                        <Table hover>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                    <th>Comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {changeLogRows}
-                            </tbody>
-                        </Table>
+                        <div className="infoBlock">
+                            <h3>Bug #{bug.id}</h3>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Creation Date</th>
+                                        <th>Short Description</th>
+                                        <th>Importance</th>
+                                        <th>Priority</th>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        {
+                                            bug.status !== "Closed" &&
+                                            <th>Action</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{bug.id}</td>
+                                        <td>{bug.creationDate}</td>
+                                        <td>{bug.shortDescription}</td>
+                                        <td>{bug.importance}</td>
+                                        <td>{bug.priority}</td>
+                                        <td>{bug.userName}</td>
+                                        <td>{bug.status}</td>
+                                        {
+                                            bug.status !== "Closed" &&
+                                            <td>
+                                                {button}
+                                            </td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </div>
+                        <div className="infoBlock">
+
+                            <h5>Full Description</h5>
+                            <p>{bug.fullDescription}</p>
+                        </div>
+                        <div className="infoBlock">
+                            <h5>Changelog</h5>
+                            <Table hover>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {changeLogRows}
+                                </tbody>
+                            </Table>
+                        </div>
                     </Container>
                 }
             </div>
