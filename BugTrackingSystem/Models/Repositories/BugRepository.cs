@@ -243,6 +243,35 @@ namespace BugTrackingSystem.Models.Repositories
             return bug;
         }
 
+        public async Task<Bug> UpdateBugAsync(BugUpdateViewModel model)
+        {
+            Bug bug = await db.Bugs.FirstOrDefaultAsync((b) => b.Id == model.Id);
+
+            if (bug != null)
+            {
+                bug.ShortDescription = model.ShortDescription;
+                bug.FullDescription = model.FullDescription;
+                Importance importance = await db.Importances.FirstOrDefaultAsync(i => i.Id == model.ImportanceId);
+                if (importance != null)
+                {
+                    bug.Importance = importance;
+                    bug.ImportanceId = model.ImportanceId;
+                }
+                Priority priority = await db.Priorities.FirstOrDefaultAsync(p => p.Id == model.PriorityId);
+                if (priority != null)
+                {
+                    bug.Priority = priority;
+                    bug.PriorityId = model.PriorityId;
+                }
+
+                await db.SaveChangesAsync();
+
+                return bug;
+            }
+
+            return null;
+        }
+
         public async Task<List<BugChangelogViewModel>> GetBugChangelogs(int bugId)
         {
             List<BugChangelog> bugChangelogs = await db.BugChangelogs.Where(bug => bug.BugId == bugId).ToListAsync();

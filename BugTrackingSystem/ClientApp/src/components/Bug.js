@@ -4,6 +4,8 @@ import "./style.css";
 import { bugService } from '../services/BugService';
 import { UpdateBugStatus } from './UpdateBugStatus';
 import { history } from '../App'
+import { UpdateBug } from './UpdateBug';
+import { authenticationService } from '../services/AuthenticationService';
 
 export class Bug extends Component {
     static displayName = Bug.name;
@@ -37,6 +39,7 @@ export class Bug extends Component {
 
     render() {
         const bug = this.state.bug;
+        const currentUser = authenticationService.currentUserValue;
         let button, changeLogRows;
         if (bug) {
             if (bug.status === "Created") {
@@ -65,7 +68,11 @@ export class Bug extends Component {
                     this.state.isLoad ?
                         <Container>
                             <div className="infoBlock">
-                                <h3>Bug #{bug.id}</h3>
+                                <h3 style={{ display: "inline-block" }}>Bug #{bug.id}</h3>
+                                {
+                                    currentUser.role === "admin" &&
+                                    <UpdateBug id={bug.id} shortDescription={bug.shortDescription} fullDescription={bug.fullDescription} importance={bug.importance} priority={bug.priority} handler={this.handler} />
+                                }
                                 <Table>
                                     <thead>
                                         <tr>

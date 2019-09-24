@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Modal, ModalBody } from 'reactstrap';
 import { bugService } from '../services/BugService';
 
 export class UpdateBugStatus extends Component {
@@ -56,7 +56,7 @@ export class UpdateBugStatus extends Component {
         return (
             <div>
                 <Button size="sm" outline color={this.props.color} onClick={this.toggle} style={{lineHeight: "1rem", margin:"0 0.2rem"}}>{this.props.action}</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} external={externalCloseBtn}>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} external={externalCloseBtn}>
                     <ModalBody>
                         <Form onSubmit={this.handleSubmit} className="updateBugStatusForm">
                             <h2>{this.props.action} Bug</h2>

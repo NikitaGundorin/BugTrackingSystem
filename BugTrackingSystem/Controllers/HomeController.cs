@@ -47,6 +47,23 @@ namespace BugTrackingSystem.Controllers
             return BadRequest(new { message = "Parameters are incorrect" });
         }
 
+        [HttpPost("updatebug")]
+        public async Task<IActionResult> UpdateBug([FromBody] BugUpdateViewModel model)
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
+
+            if ((user.Role == "admin") && ModelState.IsValid)
+            {
+                Bug bug = await bugRepository.UpdateBugAsync(model);
+                if (bug != null)
+                {
+                    return Ok();
+                }
+            }
+
+            return BadRequest(new { message = "Invalid data" });
+        }
+
         [HttpGet("addbug")]
         public IActionResult AddBug()
         {

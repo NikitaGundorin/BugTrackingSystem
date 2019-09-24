@@ -7,6 +7,7 @@ export const bugService = {
     getBug,
     addBug,
     updateBugStatus,
+    updateBug,
     getParams
 };
 
@@ -39,6 +40,17 @@ function updateBugStatus(bugId, newStatusId, comment) {
     };
 
     return fetch(`${apiUrl}/home/updatebugstatus`, requestOptions).then(handleResponse)
+}
+
+function updateBug(id, shortDescription, fullDescription, importanceId, priorityId) {
+    console.log(importanceId);
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `${authHeader().Authorization}` },
+        body: JSON.stringify({ id, shortDescription, fullDescription, importanceId, priorityId })
+    };
+
+    return fetch(`${apiUrl}/home/updatebug`, requestOptions).then(handleResponse)
 }
 
 function getParams() {
