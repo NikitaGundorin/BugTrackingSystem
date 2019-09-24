@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BugTrackingSystem.Models;
@@ -53,20 +50,7 @@ namespace BugTrackingSystem.Controllers
         [HttpGet("addbug")]
         public IActionResult AddBug()
         {
-            List<List<object>> parameters = new List<List<object>>();
-            List<object> importance = new List<object>();
-            foreach (Importance i in db.Importances)
-            {
-                importance.Add(i);
-            }
-            parameters.Add(importance);
-
-            List<object> priority = new List<object>();
-            foreach (Priority p in db.Priorities)
-            {
-                priority.Add(p);
-            }
-            parameters.Add(priority);
+            List<List<object>> parameters = bugRepository.GetParameters();
 
             return Ok(parameters);
         }
@@ -79,6 +63,7 @@ namespace BugTrackingSystem.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
 
                 await bugRepository.CreateBug(bug, user);
+
                 return Ok();
             }
             return BadRequest(new { message = "Parameters are incorrect" });

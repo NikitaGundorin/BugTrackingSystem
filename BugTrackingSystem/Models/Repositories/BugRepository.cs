@@ -16,6 +16,25 @@ namespace BugTrackingSystem.Models.Repositories
             this.db = db;
         }
 
+        public List<List<object>> GetParameters()
+        {
+            List<List<object>> parameters = new List<List<object>>();
+            List<object> importance = new List<object>();
+            foreach (Importance i in db.Importances)
+            {
+                importance.Add(i);
+            }
+            parameters.Add(importance);
+
+            List<object> priority = new List<object>();
+            foreach (Priority p in db.Priorities)
+            {
+                priority.Add(p);
+            }
+            parameters.Add(priority);
+
+            return parameters;
+        }
 
         public async Task<Bug> GetBugAsync(int id)
         {
