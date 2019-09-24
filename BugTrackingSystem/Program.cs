@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using BugTrackingSystem.Models;
+using BugTrackingSystem.Models.Repositories;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -24,7 +20,8 @@ namespace BugTrackingSystem
                 try
                 {
                     var context = services.GetRequiredService<BugTrackingSystemContext>();
-                    InitialData.Initialize(context);
+                    var accountRepository = services.GetRequiredService<AccountRepository>();
+                    InitialData.Initialize(context, accountRepository);
                 }
                 catch (Exception ex)
                 {

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using BugTrackingSystem.Models.Repositories;
+using BugTrackingSystem.ViewModels;
 
 namespace BugTrackingSystem.Models
 {
     public static class InitialData
     {
-        public static void Initialize(BugTrackingSystemContext context)
+        public static void Initialize(BugTrackingSystemContext context, AccountRepository accountRepository)
         {
             if (!context.Importances.Any())
             {
@@ -75,15 +78,15 @@ namespace BugTrackingSystem.Models
 
             if (!context.Users.Any())
             {
-                context.Users.AddRange(
-                    new User
-                    {
-                        Email = "admin@gmail.com",
-                        UserName = "admin",
-                        Password = "Admin",
-                        Role = "admin"
-                    }
-                );
+                RegisterModel registerModel = new RegisterModel()
+                {
+                    UserName = "admin",
+                    Email = "admin@gmail.com",
+                    Password = "Admin",
+                    ConfirmPassword = "Admin"
+                };
+
+                 accountRepository.Register(registerModel);
             }
 
             context.SaveChanges();

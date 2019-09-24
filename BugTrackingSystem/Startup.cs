@@ -59,6 +59,7 @@ namespace BugTrackingSystem
             });
 
             services.AddTransient<BugRepository>();
+            services.AddTransient<AccountRepository>();
 
             services.AddCors();
 
