@@ -5,19 +5,19 @@ namespace BugTrackingSystem.ViewModels
 {
     public class BugChangelogViewModel
     {
-        [Required(ErrorMessage = "Invalid BugId")]
+        [Required]
         public int BugId { get; set; }
 
-        [Required(ErrorMessage = "Invalid Date")]
+        [Required]
         public string Date { get; set; }
 
-        [Required(ErrorMessage = "Invalid New Status")]
+        [Required]
         public string NewStatus { get; set; }
 
-        [Required(ErrorMessage = "Invalid UserName")]
+        [Required]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Invalid Comment")]
+        [Required]
         public string Comment { get; set; }
     }
 }

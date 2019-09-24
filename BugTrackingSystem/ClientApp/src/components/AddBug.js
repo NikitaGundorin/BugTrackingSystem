@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, ButtonGroup } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, ButtonGroup, FormText } from 'reactstrap';
 import "./style.css";
 import { bugService } from '../services/BugService';
 import { history } from '../App';
@@ -26,7 +26,7 @@ export class AddBug extends Component {
     }
 
     validateForm() {
-        return this.state.shortDescription.length > 0 && this.state.fullDescription.length > 0;
+        return this.state.shortDescription.length > 0 && this.state.shortDescription.length < 35 && this.state.fullDescription.length > 0;
     }
 
     onRadioBtnClick(param, id) {
@@ -68,6 +68,9 @@ export class AddBug extends Component {
                     <FormGroup>
                         <Label for="shortDescription">Short Description:</Label>
                         <Input type="text" name="shortDescription" id="shortDescription" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Short Description" />
+                        <FormText color="muted">
+                            Maximum 35 characters
+                        </FormText>
                     </FormGroup>
                     <FormGroup>
                         <Label for="fullDescription">Full Description:</Label>

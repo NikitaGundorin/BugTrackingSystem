@@ -5,11 +5,10 @@ namespace BugTrackingSystem.ViewModels
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Invalid UserName or Email")]
+        [Required]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Invalid Password")]
-        [DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
     }
 }

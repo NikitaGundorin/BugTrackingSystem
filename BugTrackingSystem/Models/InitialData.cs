@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using BugTrackingSystem.Models.Repositories;
 using BugTrackingSystem.ViewModels;
 
@@ -27,7 +25,7 @@ namespace BugTrackingSystem.Models
                     },
                     new Importance
                     {
-                        Name = "ChangeRequest"
+                        Name = "Change Request"
                     }
                 );
             }
@@ -37,7 +35,7 @@ namespace BugTrackingSystem.Models
                 context.Priorities.AddRange(
                     new Priority
                     {
-                        Name = "VeryHigh"
+                        Name = "Very High"
                     },
                     new Priority
                     {

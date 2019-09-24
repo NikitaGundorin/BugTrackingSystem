@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Table, Button, Pagination, PaginationItem, PaginationLink, Spinner } from 'reactstrap';
 import { bugService } from '../services/BugService';
 import { history } from '../App'
 import "./style.css";
@@ -27,6 +27,7 @@ export class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoad: false,
       data: {
         bugs: [],
         pages: {
@@ -36,7 +37,7 @@ export class Home extends Component {
       },
       sorted: "Id",
       order: "Asc",
-      pageSize: 5
+      pageSize: 10
     };
   }
 
@@ -60,11 +61,13 @@ export class Home extends Component {
   }
 
   componentDidMount(sortOrder = "IdAsc", page = 1) {
+    this.setState({ isLoad: false });
     bugService.getBugs(sortOrder, page, this.state.pageSize).then(data => this.setState({ data }));
+    this.setState({ isLoad: true });
   }
 
   render() {
-    const rows = this.state.data ? this.state.data.bugs.map((rowData) => <Row {...rowData} key={rowData.id} />) : null;
+    const rows = this.state.data.bugs.map((rowData) => <Row {...rowData} key={rowData.id} />);
     const arrow = this.state.order === "Asc" ? <span>▴</span> : <span>▾</span>;
 
     let items = [];
@@ -84,7 +87,7 @@ export class Home extends Component {
     return (
       <div className="infoBlock">
         <h1>All bugs</h1>
-        {rows &&
+        {this.state.isLoad ?
           <Table hover>
             <thead>
               <tr>
@@ -102,6 +105,8 @@ export class Home extends Component {
               {rows}
             </tbody>
           </Table>
+          :
+          <Spinner color="primary"/>
         }
         {paginationBasic}
       </div>

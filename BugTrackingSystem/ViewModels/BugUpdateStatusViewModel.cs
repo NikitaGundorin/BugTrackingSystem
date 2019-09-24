@@ -5,13 +5,13 @@ namespace BugTrackingSystem.ViewModels
 {
     public class BugUpdateStatusViewModel
     {
-        [Required(ErrorMessage = "Invalid BugId")]
+        [Required]
         public int BugId { get; set; }
 
-        [Required(ErrorMessage = "Invalid New Status")]
+        [Required]
         public int NewStatusId { get; set; }
 
-        [Required(ErrorMessage = "Invalid Comment")]
+        [Required]
         public string Comment { get; set; }
     }
 }

@@ -6,16 +6,17 @@ namespace BugTrackingSystem.ViewModels
 {
     public class CreateBugViewModel
     {
-        [Required(ErrorMessage = "Invalid parameters")]
+        [Required]
+        [StringLength(35)]
         public string ShortDescription { get; set; }
 
-        [Required(ErrorMessage = "Invalid parameters")]
+        [Required]
         public string FullDescription { get; set; }
 
-        [Required(ErrorMessage = "Invalid parameters")]
+        [Required]
         public int PriorityId { get; set; }
 
-        [Required(ErrorMessage = "Invalid parameters")]
+        [Required]
         public int ImportanceId { get; set; }
     }
 }

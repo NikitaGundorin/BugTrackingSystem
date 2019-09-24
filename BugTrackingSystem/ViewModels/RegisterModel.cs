@@ -5,18 +5,18 @@ namespace BugTrackingSystem.ViewModels
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Invalid Email")]
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Invalid UserName")]
+        [Required]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Invalid Password")]
-        [DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Incorrect Password")]
+        [Compare("Password")]
         public string ConfirmPassword { get; set; }
     }
 }
