@@ -59,7 +59,7 @@ namespace BugTrackingSystem.Controllers
 
             if (bug is null)
             {
-                return BadRequest( new { message="Bug not found" } );
+                return BadRequest(new { message = "Bug not found" });
             }
 
             return Ok(bug);

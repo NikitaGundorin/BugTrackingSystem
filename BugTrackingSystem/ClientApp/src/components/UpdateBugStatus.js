@@ -64,7 +64,7 @@ export class UpdateBugStatus extends Component {
                                 <Label for="comment">Comment:</Label>
                                 <Input type="textarea" name="comment" id="comment" value={this.state.shortDescription} onChange={this.handleChange} placeholder="Comment" />
                             </FormGroup>
-                            <Button className="updateBugStatusFormButton" type="submit" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting} >Submit</Button>
+                            <Button className="formButton" type="submit" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting} >Submit</Button>
                             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                         </Form>
                     </ModalBody>

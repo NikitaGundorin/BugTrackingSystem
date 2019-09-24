@@ -25,7 +25,7 @@ export class UpdateBug extends Component {
         this.handleChange.bind(this);
         this.toggle = this.toggle.bind(this);
     }
-    
+
     async toggle() {
         this.setState(prevState => ({
             modal: !prevState.modal
@@ -36,7 +36,7 @@ export class UpdateBug extends Component {
             console.log(this.state.params);
             let importanceId = this.state.params[0].find(i => i.name === this.state.importance).id;
             let priorityId = this.state.params[1].find(p => p.name === this.state.priority).id;
-            this.setState({importanceId: importanceId, priorityId: priorityId});
+            this.setState({ importanceId: importanceId, priorityId: priorityId });
         }
     }
 
@@ -108,7 +108,8 @@ export class UpdateBug extends Component {
                                             {priority}
                                         </ButtonGroup>
                                     </FormGroup>
-                                    <Button type="submit" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting}>Save</Button>
+                                    <Button type="submit" className="formButton" color="primary" disabled={!this.validateForm() && !this.state.isSubmitting}>Save</Button>
+                                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                                 </Form>
                                 :
                                 <div style={{ display: "flex", justifyContent: "center" }} >

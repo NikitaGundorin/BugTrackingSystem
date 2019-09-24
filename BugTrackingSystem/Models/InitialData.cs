@@ -84,7 +84,7 @@ namespace BugTrackingSystem.Models
                     ConfirmPassword = "Admin"
                 };
 
-                 accountRepository.Register(registerModel);
+                accountRepository.Register(registerModel);
             }
 
             context.SaveChanges();

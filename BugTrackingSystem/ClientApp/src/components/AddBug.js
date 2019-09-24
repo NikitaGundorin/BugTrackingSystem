@@ -27,7 +27,7 @@ export class AddBug extends Component {
     }
 
     validateForm() {
-        return this.state.shortDescription.length > 0 && this.state.shortDescription.length < 35 && this.state.fullDescription.length > 0;
+        return this.state.shortDescription.length > 0 && this.state.shortDescription.length <= 35 && this.state.fullDescription.length > 0;
     }
 
     onRadioBtnClick(param, id) {

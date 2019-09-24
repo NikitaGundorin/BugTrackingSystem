@@ -29,18 +29,18 @@ export class SignUp extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        this.setState({isSubmitting: false});
+        this.setState({ isSubmitting: false });
         authenticationService.signUp(this.state.username, this.state.email, this.state.password, this.state.confirmPassword)
-        .then(
-            user => {
-                const { from } = this.props.location.state || { from: { pathname: "/" } };
-                this.props.history.push(from);
-            },
-            error => {
-                this.setState({isSubmitting: false});
-                alert(error);
-            }
-        );
+            .then(
+                user => {
+                    const { from } = this.props.location.state || { from: { pathname: "/" } };
+                    this.props.history.push(from);
+                },
+                error => {
+                    this.setState({ isSubmitting: false });
+                    alert(error);
+                }
+            );
     }
 
     render() {

@@ -15,7 +15,7 @@ export class SignIn extends Component {
             isSubmitting: false
         };
 
-        if (authenticationService.currentUserValue) { 
+        if (authenticationService.currentUserValue) {
             this.props.history.push('/');
         }
     }
@@ -23,29 +23,29 @@ export class SignIn extends Component {
     validateForm() {
         return this.state.username.length > 0 && this.state.password.length > 0;
     }
-    
+
     handleChange = event => {
         this.setState({
             [event.target.id]: event.target.value
         });
     }
-    
+
     handleSubmit = event => {
         event.preventDefault();
-        this.setState({isSubmitting: false});
+        this.setState({ isSubmitting: false });
         authenticationService.login(this.state.username, this.state.password)
-        .then(
-            user => {
-                const { from } = this.props.location.state || { from: { pathname: "/" } };
-                this.props.history.push(from);
-            },
-            error => {
-                this.setState({isSubmitting: false});
-                alert(error);
-            }
-        );
+            .then(
+                user => {
+                    const { from } = this.props.location.state || { from: { pathname: "/" } };
+                    this.props.history.push(from);
+                },
+                error => {
+                    this.setState({ isSubmitting: false });
+                    alert(error);
+                }
+            );
     }
-    
+
     render() {
         return (
             <div>

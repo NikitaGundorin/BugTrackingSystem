@@ -1,5 +1,5 @@
 {
-  "name": "BugTrackingSystemTest",
+  "name": "BugTrackingSystem",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

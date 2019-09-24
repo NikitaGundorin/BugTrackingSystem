@@ -7,7 +7,6 @@ import { UpdateBug } from './UpdateBug';
 import { DeleteBug } from './DeleteBug';
 import { history } from '../App'
 import { authenticationService } from '../services/AuthenticationService';
-import { from } from 'rxjs';
 
 export class Bug extends Component {
     static displayName = Bug.name;

@@ -48,7 +48,7 @@ export default class App extends Component {
                     <header>
                         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
                             <Container>
-                                <NavbarBrand tag={Link} to="/">BugTrackingSystemTest</NavbarBrand>
+                                <NavbarBrand tag={Link} to="/">BugTrackingSystem</NavbarBrand>
                                 <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
                                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                                     {currentUser &&

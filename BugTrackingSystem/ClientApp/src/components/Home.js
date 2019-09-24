@@ -73,7 +73,7 @@ export class Home extends Component {
     for (let number = 1; number <= pages.totalPages; number++) {
       items.push(
         <PaginationItem key={number} active={number === pages.pageNumber}>
-          <PaginationLink onClick={() => this.componentDidMount(this.state.sorted + this.state.order, number, this.state.pageSize)}>{number}</PaginationLink>
+          <PaginationLink onClick={() => this.componentDidMount(this.state.sorted + this.state.order, number)}>{number}</PaginationLink>
         </PaginationItem>
       );
     }
