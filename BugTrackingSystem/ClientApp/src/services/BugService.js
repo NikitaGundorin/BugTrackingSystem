@@ -10,9 +10,9 @@ export const bugService = {
     getParams
 };
 
-function getBugs(sortOrder) {
+function getBugs(sortOrder, page, pageSize) {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${apiUrl}/home/index?sortOrder=${sortOrder}`, requestOptions).then(handleResponse);
+    return fetch(`${apiUrl}/home/index?sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}`, requestOptions).then(handleResponse);
 }
 
 function getBug(id) {

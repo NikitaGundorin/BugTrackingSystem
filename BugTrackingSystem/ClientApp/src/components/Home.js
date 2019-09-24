@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Table, Button } from 'reactstrap';
+import { Table, Button, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { bugService } from '../services/BugService';
 import { history } from '../App'
 import "./style.css";
+import { timingSafeEqual } from 'crypto';
 
 
 const Row = ({ id, creationDate, shortDescription, importance, priority, status, userName }) => (
@@ -28,9 +29,16 @@ export class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      data: {
+        bugs: [],
+        pages: {
+          pageNumber: 0,
+          totalPages: 0
+        }
+      },
       sorted: "Id",
-      order: "Asc"
+      order: "Asc",
+      pageSize: 5
     };
   }
 
@@ -53,13 +61,28 @@ export class Home extends Component {
     this.componentDidMount(sortOrder);
   }
 
-  componentDidMount(sortOrder) {
-    bugService.getBugs(sortOrder).then(data => this.setState({ data }));
+  componentDidMount(sortOrder = "IdAsc", page = 1) {
+    bugService.getBugs(sortOrder, page, this.state.pageSize).then(data => this.setState({ data }));
   }
 
   render() {
-    const rows = this.state.data ? this.state.data.map((rowData) => <Row {...rowData} key={rowData.id} />) : null;
+    const rows = this.state.data ? this.state.data.bugs.map((rowData) => <Row {...rowData} key={rowData.id} />) : null;
     const arrow = this.state.order === "Asc" ? <span>▴</span> : <span>▾</span>;
+
+    let items = [];
+    const pages = this.state.data.pages;
+    for (let number = 1; number <= pages.totalPages; number++) {
+      items.push(
+        <PaginationItem key={number} active={number === pages.pageNumber}>
+          <PaginationLink onClick={() => this.componentDidMount(this.state.sorted + this.state.order, number, this.state.pageSize)}>{number}</PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    const paginationBasic = (
+      <Pagination style={{ justifyContent: "center" }} maxSize="1">{items}</Pagination>
+    );
+
     return (
       <div>
         <h1>All bugs</h1>
@@ -82,6 +105,7 @@ export class Home extends Component {
             </tbody>
           </Table>
         }
+        {paginationBasic}
       </div>
     );
   }

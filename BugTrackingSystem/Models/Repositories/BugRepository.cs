@@ -56,7 +56,7 @@ namespace BugTrackingSystem.Models.Repositories
             return bug;
         }
 
-        public async Task<IEnumerable<BugPreviewViewModel>> GetBugsListAsync(string sortOrder)
+        public async Task<IndexViewModel> GetBugsListAsync(string sortOrder, int page, int pageSize)
         {
             List<BugPreviewViewModel> bugs = await db.Bugs.Select(b => new BugPreviewViewModel
             {
@@ -120,7 +120,16 @@ namespace BugTrackingSystem.Models.Repositories
                     break;
             }
 
-            return result;
+            var count = result.Count();
+            var resultBugs = result.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                Pages = new PageViewModel(count, page, pageSize),
+                Bugs = resultBugs
+            };
+
+            return viewModel;
         }
 
         public async Task<Bug> CreateBug(CreateBugViewModel bug, User user)
