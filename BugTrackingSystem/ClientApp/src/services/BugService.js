@@ -8,17 +8,13 @@ export const bugService = {
     addBug,
     updateBugStatus,
     updateBug,
+    deleteBug,
     getParams
 };
 
 function getBugs(sortOrder, page, pageSize) {
     const requestOptions = { method: 'GET', headers: authHeader() };
     return fetch(`${apiUrl}/home/index?sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}`, requestOptions).then(handleResponse);
-}
-
-function getBug(id) {
-    const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${apiUrl}/home/bug/${id}`, requestOptions).then(handleResponse);
 }
 
 function addBug(shortDescription, fullDescription, priorityId, importanceId) {
@@ -32,6 +28,11 @@ function addBug(shortDescription, fullDescription, priorityId, importanceId) {
     return fetch(`${apiUrl}/home/addbug`, requestOptions).then(handleResponse)
 }
 
+function getBug(id) {
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    return fetch(`${apiUrl}/home/bug/${id}`, requestOptions).then(handleResponse);
+}
+
 function updateBugStatus(bugId, newStatusId, comment) {
     const requestOptions = {
         method: 'POST',
@@ -39,21 +40,26 @@ function updateBugStatus(bugId, newStatusId, comment) {
         body: JSON.stringify({ bugId, newStatusId, comment })
     };
 
-    return fetch(`${apiUrl}/home/updatebugstatus`, requestOptions).then(handleResponse)
+    return fetch(`${apiUrl}/home/bug/${bugId}/updatebugstatus`, requestOptions).then(handleResponse)
 }
 
 function updateBug(id, shortDescription, fullDescription, importanceId, priorityId) {
-    console.log(importanceId);
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `${authHeader().Authorization}` },
         body: JSON.stringify({ id, shortDescription, fullDescription, importanceId, priorityId })
     };
 
-    return fetch(`${apiUrl}/home/updatebug`, requestOptions).then(handleResponse)
+    return fetch(`${apiUrl}/home/bug/${id}/update`, requestOptions).then(handleResponse)
+}
+
+function deleteBug(id){
+    const requestOptions = { method: 'POST', headers: authHeader() };
+
+    return fetch(`${apiUrl}/home/bug/${id}/delete`, requestOptions).then(handleResponse)
 }
 
 function getParams() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${apiUrl}/home/addbug`, requestOptions).then(handleResponse);
+    return fetch(`${apiUrl}/home/getparams`, requestOptions).then(handleResponse);
 }

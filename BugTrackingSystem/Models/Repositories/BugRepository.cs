@@ -272,6 +272,22 @@ namespace BugTrackingSystem.Models.Repositories
             return null;
         }
 
+        public async Task<string> DeleteBugAsync(int id)
+        {
+            Bug bug = await db.Bugs.FirstOrDefaultAsync((b) => b.Id == id);
+
+            if (bug == null)
+            {
+                return null;
+            }
+
+            db.Bugs.Remove(bug);
+
+            await db.SaveChangesAsync();
+
+            return "Ok";
+        }
+
         public async Task<List<BugChangelogViewModel>> GetBugChangelogs(int bugId)
         {
             List<BugChangelog> bugChangelogs = await db.BugChangelogs.Where(bug => bug.BugId == bugId).ToListAsync();

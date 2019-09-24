@@ -3,9 +3,11 @@ import { ButtonGroup, Container, Table, Spinner } from 'reactstrap';
 import "./style.css";
 import { bugService } from '../services/BugService';
 import { UpdateBugStatus } from './UpdateBugStatus';
-import { history } from '../App'
 import { UpdateBug } from './UpdateBug';
+import { DeleteBug } from './DeleteBug';
+import { history } from '../App'
 import { authenticationService } from '../services/AuthenticationService';
+import { from } from 'rxjs';
 
 export class Bug extends Component {
     static displayName = Bug.name;
@@ -71,7 +73,10 @@ export class Bug extends Component {
                                 <h3 style={{ display: "inline-block" }}>Bug #{bug.id}</h3>
                                 {
                                     currentUser.role === "admin" &&
-                                    <UpdateBug id={bug.id} shortDescription={bug.shortDescription} fullDescription={bug.fullDescription} importance={bug.importance} priority={bug.priority} handler={this.handler} />
+                                    <div style={{ display: "inline-block" }}>
+                                        <UpdateBug id={bug.id} shortDescription={bug.shortDescription} fullDescription={bug.fullDescription} importance={bug.importance} priority={bug.priority} handler={this.handler} />
+                                        <DeleteBug id={bug.id} />
+                                    </div>
                                 }
                                 <Table>
                                     <thead>

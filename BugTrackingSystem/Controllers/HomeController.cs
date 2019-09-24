@@ -30,41 +30,7 @@ namespace BugTrackingSystem.Controllers
             return Ok(bugs);
         }
 
-        [HttpPost("updatebugstatus")]
-        public async Task<IActionResult> UpdateBugStatus([FromBody] BugUpdateStatusViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
-
-                var result = await bugRepository.UpdateBugStatusAsync(model.BugId, model.NewStatusId, model.Comment, user.Id);
-                if (result != null)
-                {
-                    return Ok();
-                }
-            }
-
-            return BadRequest(new { message = "Parameters are incorrect" });
-        }
-
-        [HttpPost("updatebug")]
-        public async Task<IActionResult> UpdateBug([FromBody] BugUpdateViewModel model)
-        {
-            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
-
-            if ((user.Role == "admin") && ModelState.IsValid)
-            {
-                Bug bug = await bugRepository.UpdateBugAsync(model);
-                if (bug != null)
-                {
-                    return Ok();
-                }
-            }
-
-            return BadRequest(new { message = "Invalid data" });
-        }
-
-        [HttpGet("addbug")]
+        [HttpGet("getparams")]
         public IActionResult AddBug()
         {
             List<List<object>> parameters = bugRepository.GetParameters();
@@ -97,6 +63,58 @@ namespace BugTrackingSystem.Controllers
             }
 
             return Ok(bug);
+        }
+
+        [HttpPost("bug/{bugId}/updatebugstatus")]
+        public async Task<IActionResult> UpdateBugStatus([FromBody] BugUpdateStatusViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
+
+                var result = await bugRepository.UpdateBugStatusAsync(model.BugId, model.NewStatusId, model.Comment, user.Id);
+                if (result != null)
+                {
+                    return Ok();
+                }
+            }
+
+            return BadRequest(new { message = "Parameters are incorrect" });
+        }
+
+        [HttpPost("bug/{bugId}/update")]
+        public async Task<IActionResult> UpdateBug([FromBody] BugUpdateViewModel model)
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
+
+            if ((user.Role == "admin") && ModelState.IsValid)
+            {
+                Bug bug = await bugRepository.UpdateBugAsync(model);
+                if (bug != null)
+                {
+                    return Ok();
+                }
+            }
+
+            return BadRequest(new { message = "Invalid data" });
+        }
+
+
+        [HttpPost("bug/{bugId}/delete")]
+        public async Task<IActionResult> DeleteBug(int bugId)
+        {
+            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
+
+            if ((user.Role == "admin") && ModelState.IsValid)
+            {
+                var result = await bugRepository.DeleteBugAsync(bugId);
+                if (result == "Ok")
+                {
+                    return Ok();
+                }
+            }
+
+            return BadRequest(new { message = "Invalid data" });
         }
     }
 }
