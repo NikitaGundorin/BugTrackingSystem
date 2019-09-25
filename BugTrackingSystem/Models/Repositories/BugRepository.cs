@@ -75,68 +75,74 @@ namespace BugTrackingSystem.Models.Repositories
             return bug;
         }
 
-        public async Task<IndexViewModel> GetBugsListAsync(string sortOrder, int page, int pageSize)
+        public IndexViewModel GetBugsList(string sortOrder, int page, int pageSize)
         {
-            List<BugPreviewViewModel> bugs = await db.Bugs.Select(b => new BugPreviewViewModel
-            {
-                Id = b.Id,
-                CreationDate = b.CreationDate.ToString("dd.MM.yyy hh:mm"),
-                CreationDateTime = b.CreationDate,
-                ShortDescription = b.ShortDescription,
-                Importance = b.Importance.Name,
-                ImportanceId = b.ImportanceId,
-                Priority = b.Priority.Name,
-                PriorityId = b.PriorityId,
-                Status = b.Status.Name,
-                StatusId = b.StatusId,
-                UserName = b.User.UserName
-            }).ToListAsync();
-
-            IEnumerable<BugPreviewViewModel> result = bugs.OrderBy(b => b.Id);
+            var bugs = db.Bugs.OrderBy(b => b.Id);
 
             switch (sortOrder)
             {
                 case "IdAsc":
                     break;
                 case "IdDesc":
-                    result = bugs.OrderByDescending(b => b.Id);
+                    bugs = db.Bugs.OrderByDescending(b => b.Id);
                     break;
                 case "CreationDateAsc":
-                    result = bugs.OrderBy(b => b.CreationDateTime);
+                    bugs = db.Bugs.OrderBy(b => b.CreationDate);
                     break;
                 case "CreationDateDesc":
-                    result = bugs.OrderByDescending(b => b.CreationDateTime);
+                    bugs = db.Bugs.OrderByDescending(b => b.CreationDate);
                     break;
                 case "ShortDescriptionAsc":
-                    result = bugs.OrderBy(b => b.ShortDescription);
+                    bugs = db.Bugs.OrderBy(b => b.ShortDescription);
                     break;
                 case "ShortDescriptionDesc":
-                    result = bugs.OrderByDescending(b => b.ShortDescription);
+                    bugs = db.Bugs.OrderByDescending(b => b.ShortDescription);
                     break;
                 case "UserNameAsc":
-                    result = bugs.OrderBy(b => b.UserName);
+                    bugs = db.Bugs.OrderBy(b => b.User.UserName);
                     break;
                 case "UserNameDesc":
-                    result = bugs.OrderByDescending(b => b.UserName);
+                    bugs = db.Bugs.OrderByDescending(b => b.User.UserName);
                     break;
                 case "StatusAsc":
-                    result = bugs.OrderBy(b => b.StatusId);
+                    bugs = db.Bugs.OrderBy(b => b.StatusId);
                     break;
                 case "StatusDesc":
-                    result = bugs.OrderByDescending(b => b.StatusId);
+                    bugs = db.Bugs.OrderByDescending(b => b.StatusId);
                     break;
                 case "PriorityAsc":
-                    result = bugs.OrderByDescending(b => b.PriorityId);
+                    bugs = db.Bugs.OrderByDescending(b => b.PriorityId);
                     break;
                 case "PriorityDesc":
-                    result = bugs.OrderBy(b => b.PriorityId);
+                    bugs = db.Bugs.OrderBy(b => b.PriorityId);
                     break;
                 case "ImportanceAsc":
-                    result = bugs.OrderByDescending(b => b.ImportanceId);
+                    bugs = db.Bugs.OrderByDescending(b => b.ImportanceId);
                     break;
                 case "ImportanceDesc":
-                    result = bugs.OrderBy(b => b.ImportanceId);
+                    bugs = db.Bugs.OrderBy(b => b.ImportanceId);
                     break;
+            }
+
+            List<BugPreviewViewModel> result = new List<BugPreviewViewModel>();
+
+            foreach (Bug b in bugs)
+            {
+                BugPreviewViewModel item = new BugPreviewViewModel()
+                {
+                    Id = b.Id,
+                    CreationDate = b.CreationDate.ToString("dd.MM.yyy hh:mm"),
+                    CreationDateTime = b.CreationDate,
+                    ShortDescription = b.ShortDescription,
+                    Importance = db.Importances.FirstOrDefault(i => i.Id == b.ImportanceId).Name,
+                    ImportanceId = b.ImportanceId,
+                    Priority = db.Priorities.FirstOrDefault(p => p.Id == b.PriorityId).Name,
+                    PriorityId = b.PriorityId,
+                    Status = db.Statuses.FirstOrDefault(s => s.Id == b.StatusId).Name,
+                    StatusId = b.StatusId,
+                    UserName = db.Users.FirstOrDefault(u => u.Id == b.UserId).UserName
+                };
+                result.Add(item);
             }
 
             var count = result.Count();

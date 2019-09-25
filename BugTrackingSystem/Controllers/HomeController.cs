@@ -23,9 +23,9 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpGet("index")]
-        public async Task<IActionResult> Index(string sortOrder = "IdAsc", int page = 1, int pageSize = 15)
+        public IActionResult Index(string sortOrder = "IdAsc", int page = 1, int pageSize = 15)
         {
-            var bugs = await bugRepository.GetBugsListAsync(sortOrder, page, pageSize);
+            var bugs = bugRepository.GetBugsList(sortOrder, page, pageSize);
 
             return Ok(bugs);
         }
