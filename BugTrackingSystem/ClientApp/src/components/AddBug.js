@@ -14,7 +14,10 @@ export class AddBug extends Component {
             fullDescription: "",
             priorityId: 1,
             importanceId: 1,
-            params: null,
+            params: {
+                importances: [],
+                priorities: []
+            },
             isLoad: false,
             isSubmitting: false
         };
@@ -58,8 +61,8 @@ export class AddBug extends Component {
     }
 
     render() {
-        const importance = this.state.params ? this.state.params[0].map((importance) => <Button color="primary" onClick={() => this.onRadioBtnClick(0, importance.id)} active={this.state.importanceId === importance.id}>{importance.name}</Button>) : null;
-        const priority = this.state.params ? this.state.params[1].map((priority) => <Button color="primary" onClick={() => this.onRadioBtnClick(1, priority.id)} active={this.state.priorityId === priority.id}>{priority.name}</Button>) : null;
+        const importance = this.state.params.importances.map((importance) => <Button color="primary" onClick={() => this.onRadioBtnClick(0, importance.id)} active={this.state.importanceId === importance.id}>{importance.name}</Button>);
+        const priority = this.state.params.priorities.map((priority) => <Button color="primary" onClick={() => this.onRadioBtnClick(1, priority.id)} active={this.state.priorityId === priority.id}>{priority.name}</Button>);
 
         return (
             <div>

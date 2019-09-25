@@ -16,22 +16,14 @@ namespace BugTrackingSystem.Models.Repositories
             this.db = db;
         }
 
-        public List<List<object>> GetParameters()
+        public async Task<ParametersViewModel> GetParametersAsync()
         {
-            List<List<object>> parameters = new List<List<object>>();
-            List<object> importance = new List<object>();
-            foreach (Importance i in db.Importances)
+            ParametersViewModel parameters = new ParametersViewModel()
             {
-                importance.Add(i);
-            }
-            parameters.Add(importance);
+                Importances = await db.Importances.ToListAsync(),
+                Priorities = await db.Priorities.ToListAsync()
 
-            List<object> priority = new List<object>();
-            foreach (Priority p in db.Priorities)
-            {
-                priority.Add(p);
-            }
-            parameters.Add(priority);
+            };
 
             return parameters;
         }

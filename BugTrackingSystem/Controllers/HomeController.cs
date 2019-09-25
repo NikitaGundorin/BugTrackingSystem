@@ -31,9 +31,9 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpGet("getparams")]
-        public IActionResult AddBug()
+        public async Task<IActionResult> AddBug()
         {
-            List<List<object>> parameters = bugRepository.GetParameters();
+            ParametersViewModel parameters = await bugRepository.GetParametersAsync();
 
             return Ok(parameters);
         }

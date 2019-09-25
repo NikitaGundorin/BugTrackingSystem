@@ -16,7 +16,10 @@ export class UpdateBug extends Component {
             importance: this.props.importance,
             importanceId: null,
             priorityId: null,
-            params: null,
+            params: {
+                importances: [],
+                priorities: []
+            },
             isLoad: false,
             isSubmitting: false,
             modal: false
@@ -33,9 +36,8 @@ export class UpdateBug extends Component {
 
         if (this.state.modal == false) {
             await bugService.getParams().then(params => this.setState({ params, isLoad: true }));
-            console.log(this.state.params);
-            let importanceId = this.state.params[0].find(i => i.name === this.state.importance).id;
-            let priorityId = this.state.params[1].find(p => p.name === this.state.priority).id;
+            let importanceId = this.state.params.importances.find(i => i.name === this.state.importance).id;
+            let priorityId = this.state.params.priorities.find(p => p.name === this.state.priority).id;
             this.setState({ importanceId: importanceId, priorityId: priorityId });
         }
     }
@@ -57,7 +59,7 @@ export class UpdateBug extends Component {
     handleSubmit = event => {
         event.preventDefault();
         this.setState({ isSubmitting: true });
-        bugService.updateBug(this.state.id, this.state.shortDescription, this.state.fullDescription, this.state.priorityId, this.state.importanceId)
+        bugService.updateBug(this.state.id, this.state.shortDescription, this.state.fullDescription, this.state.importanceId, this.state.priorityId)
             .then(
                 bug => {
                     this.toggle();
@@ -72,8 +74,8 @@ export class UpdateBug extends Component {
     }
 
     render() {
-        const importance = this.state.params ? this.state.params[0].map((importance) => <Button color="primary" onClick={() => this.onRadioBtnClick(0, importance.id)} active={this.state.importanceId === importance.id}>{importance.name}</Button>) : null;
-        const priority = this.state.params ? this.state.params[1].map((priority) => <Button color="primary" onClick={() => this.onRadioBtnClick(1, priority.id)} active={this.state.priorityId === priority.id}>{priority.name}</Button>) : null;
+        const importance = this.state.params.importances.map((importance) => <Button color="primary" onClick={() => this.onRadioBtnClick(0, importance.id)} active={this.state.importanceId === importance.id}>{importance.name}</Button>);
+        const priority = this.state.params.priorities.map((priority) => <Button color="primary" onClick={() => this.onRadioBtnClick(1, priority.id)} active={this.state.priorityId === priority.id}>{priority.name}</Button>);
         const externalCloseBtn = <button className="close" style={{ position: 'absolute', top: '15px', right: '15px' }} onClick={this.toggle}>&times;</button>;
 
         return (
