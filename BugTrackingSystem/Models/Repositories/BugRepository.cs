@@ -151,7 +151,7 @@ namespace BugTrackingSystem.Models.Repositories
             return viewModel;
         }
 
-        public async Task<Bug> CreateBug(CreateBugViewModel bug, User user)
+        public async Task<Bug> CreateBugAsync(CreateBugViewModel bug, User user)
         {
             Bug newBug = new Bug()
             {

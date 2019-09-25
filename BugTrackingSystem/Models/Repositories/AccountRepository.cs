@@ -5,7 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using BugTrackingSystem.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BugTrackingSystem.Models.Repositories
@@ -19,9 +21,9 @@ namespace BugTrackingSystem.Models.Repositories
             db = context;
         }
 
-        private ClaimsIdentity GetIdentity(string username, string passwordHash)
+        private async Task<ClaimsIdentity> GetIdentityAsync(string username, string passwordHash)
         {
-            User user = db.Users.FirstOrDefault(x => (x.UserName == username || x.Email == username) && x.PasswordHash == passwordHash);
+            User user = await db.Users.FirstOrDefaultAsync(x => (x.UserName == username || x.Email == username) && x.PasswordHash == passwordHash);
 
             if (user != null)
             {
@@ -39,9 +41,9 @@ namespace BugTrackingSystem.Models.Repositories
             return null;
         }
 
-        private object Authenticate(string userName, string passwordHash)
+        private async Task<object> AuthenticateAsync(string userName, string passwordHash)
         {
-            var identity = GetIdentity(userName, passwordHash);
+            var identity = await GetIdentityAsync(userName, passwordHash);
             if (identity == null)
             {
                 return null;
@@ -66,10 +68,10 @@ namespace BugTrackingSystem.Models.Repositories
             return response;
         }
 
-        public object Token(LoginModel model)
+        public async Task<object> TokenAsync(LoginModel model)
         {
             string passwordHash = GetHashPassword(model.Password);
-            var result = Authenticate(model.UserName, passwordHash);
+            var result = await AuthenticateAsync(model.UserName, passwordHash);
 
             if (result == null)
             {
@@ -79,17 +81,17 @@ namespace BugTrackingSystem.Models.Repositories
             return result;
         }
 
-        public object Register(RegisterModel model)
+        public async Task<object> RegisterAsync(RegisterModel model)
         {
-            User user = db.Users.FirstOrDefault(u => (u.Email == model.Email) || (u.UserName == model.UserName));
+            User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == model.Email) || (u.UserName == model.UserName));
 
             if (user == null)
             {
                 string passwordHash = GetHashPassword(model.Password);
-                db.Users.Add(new User { Email = model.Email, PasswordHash = passwordHash, UserName = model.UserName, Role = "user" });
-                db.SaveChangesAsync();
+                await db.Users.AddAsync(new User { Email = model.Email, PasswordHash = passwordHash, UserName = model.UserName, Role = "user" });
+                await db.SaveChangesAsync();
 
-                var result = Authenticate(model.UserName, passwordHash);
+                var result = await AuthenticateAsync(model.UserName, passwordHash);
 
                 return result;
             }

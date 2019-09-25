@@ -45,7 +45,7 @@ namespace BugTrackingSystem.Controllers
             {
                 User user = await db.Users.FirstOrDefaultAsync(u => (u.Email == User.Identity.Name) || (u.UserName == User.Identity.Name));
 
-                await bugRepository.CreateBug(bug, user);
+                await bugRepository.CreateBugAsync(bug, user);
 
                 return Ok();
             }

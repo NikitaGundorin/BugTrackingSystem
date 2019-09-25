@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using BugTrackingSystem.Models.Repositories;
 using BugTrackingSystem.ViewModels;
 
@@ -6,11 +7,11 @@ namespace BugTrackingSystem.Models
 {
     public static class InitialData
     {
-        public static void Initialize(BugTrackingSystemContext context, AccountRepository accountRepository)
+        public static async Task InitializeAsync(BugTrackingSystemContext context, AccountRepository accountRepository)
         {
             if (!context.Importances.Any())
             {
-                context.Importances.AddRange(
+                await context.Importances.AddRangeAsync(
                     new Importance
                     {
                         Name = "Critical"
@@ -32,7 +33,7 @@ namespace BugTrackingSystem.Models
 
             if (!context.Priorities.Any())
             {
-                context.Priorities.AddRange(
+                await context.Priorities.AddRangeAsync(
                     new Priority
                     {
                         Name = "Very High"
@@ -54,7 +55,7 @@ namespace BugTrackingSystem.Models
 
             if (!context.Statuses.Any())
             {
-                context.Statuses.AddRange(
+                await context.Statuses.AddRangeAsync(
                     new Status
                     {
                         Name = "Created"
@@ -84,10 +85,10 @@ namespace BugTrackingSystem.Models
                     ConfirmPassword = "Admin"
                 };
 
-                accountRepository.Register(registerModel);
+                await accountRepository.RegisterAsync(registerModel);
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using BugTrackingSystem.Models;
 using BugTrackingSystem.Models.Repositories;
 using Microsoft.AspNetCore;
@@ -10,7 +11,7 @@ namespace BugTrackingSystem
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
 
@@ -21,7 +22,7 @@ namespace BugTrackingSystem
                 {
                     var context = services.GetRequiredService<BugTrackingSystemContext>();
                     var accountRepository = services.GetRequiredService<AccountRepository>();
-                    InitialData.Initialize(context, accountRepository);
+                    await InitialData.InitializeAsync(context, accountRepository);
                 }
                 catch (Exception ex)
                 {

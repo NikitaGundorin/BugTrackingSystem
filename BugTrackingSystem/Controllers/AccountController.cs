@@ -17,11 +17,11 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpPost("token")]
-        public IActionResult Token([FromBody] LoginModel model)
+        public async Task<IActionResult> Token([FromBody] LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = accountRepository.Token(model);
+                var result = await accountRepository.TokenAsync(model);
 
                 if (result == null)
                 {
@@ -35,11 +35,11 @@ namespace BugTrackingSystem.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = accountRepository.Register(model);
+                var result = await accountRepository.RegisterAsync(model);
 
                 if (result != null)
                 {
