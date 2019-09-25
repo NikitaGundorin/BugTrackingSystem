@@ -124,9 +124,11 @@ namespace BugTrackingSystem.Models.Repositories
                     break;
             }
 
+            var bugsPage = bugs.Skip((page - 1) * pageSize).Take(pageSize);
+
             List<BugPreviewViewModel> result = new List<BugPreviewViewModel>();
 
-            foreach (Bug b in bugs)
+            foreach (Bug b in bugsPage)
             {
                 BugPreviewViewModel item = new BugPreviewViewModel()
                 {
@@ -145,13 +147,12 @@ namespace BugTrackingSystem.Models.Repositories
                 result.Add(item);
             }
 
-            var count = result.Count();
-            var resultBugs = result.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count = db.Bugs.Count();
 
             IndexViewModel viewModel = new IndexViewModel
             {
                 Pages = new PageViewModel(count, page, pageSize),
-                Bugs = resultBugs
+                Bugs = result
             };
 
             return viewModel;
